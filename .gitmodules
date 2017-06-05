@@ -1,0 +1,3 @@
+[submodule "snowboy"]
+	path = snowboy
+	url = https://github.com/Kitt-AI/snowboy.git
