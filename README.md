@@ -1,7 +1,7 @@
 Mic Array
 =========
 
-Utils for ReSpeaker Microphone Array. It includes DOA (Direction of Arrival), VAD (Voice Activity Detection), KWS (Keyword Spotting or Keyword Search) and etc.
+Utils for [ReSpeaker Microphone Array](https://www.seeedstudio.com/ReSpeaker-Mic-Array-Far-field-w--7-PDM-Microphones--p-2719.html). It includes DOA (Direction of Arrival), VAD (Voice Activity Detection), KWS (Keyword Spotting or Keyword Search) and etc.
 
 + `pixel_ring.py` - control the pixel ring
 + `mic_array.py` - read 8 channels raw audio from the Mic Array and estimate sound's DOA (Direction of Arrival)
@@ -51,3 +51,8 @@ Utils for ReSpeaker Microphone Array. It includes DOA (Direction of Arrival), VA
    python kws_doa.py
    ```
 
+## For Raspberry Pi
+Google released [Google Assistant Library](https://github.com/googlesamples/assistant-sdk-python/tree/master/google-assistant-library) for Raspberry Pi to provide hotword detection ("Ok Google" or "Hey Google"), audio recording, assistant response playback and etc. We can add LED lights indicator based on the library to make a device very similar with Google Home.
+
+1. Follow [the guide](https://github.com/googlesamples/assistant-sdk-python/tree/master/google-assistant-library) to install Google Assistant Library.
+2. Run `python google_assistant_for_raspberry_pi.py`
