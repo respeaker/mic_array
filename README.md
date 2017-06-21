@@ -22,7 +22,7 @@ Utils for [ReSpeaker Microphone Array](https://www.seeedstudio.com/ReSpeaker-Mic
    If you don't want to access USB device with `sudo`, add a udev `.rules` file to `/etc/udev/rules.d`:
    ```
    echo 'SUBSYSTEM=="usb", MODE="0666"' | sudo tee -a /etc/udev/rules.d/60-usb.rules
-   sudo sudo udevadm control -R  # then re-plug the usb device
+   sudo udevadm control -R  # then re-plug the usb device
    ```
 
 2. Read 8 channels audio from the Mic Array and estimate sound's DOA
@@ -44,7 +44,7 @@ Utils for [ReSpeaker Microphone Array](https://www.seeedstudio.com/ReSpeaker-Mic
    git submodule init
    git submodule update
    cd snowboy/swig/Python
-   sudo apt python-dev libatlas-base-dev swig           # requiremetns to compile snowboy
+   sudo apt-get install python-dev libatlas-base-dev swig           # requiremetns to compile snowboy
    echo 'from snowboydetect import *' > __init__.py     # create __init__.py for a python module
    cd ../../..                                          # chang to the root directory of the repository
    ln -s snowboy/swig/Python snowboydetect
