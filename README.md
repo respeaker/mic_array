@@ -45,6 +45,7 @@ Utils for [ReSpeaker Microphone Array](https://www.seeedstudio.com/ReSpeaker-Mic
    git submodule update
    cd snowboy/swig/Python
    sudo apt-get install python-dev libatlas-base-dev swig           # requiremetns to compile snowboy
+   make                                                 # if got an error of swig3.x.x, edit the Makefile and disable the swig version check.
    echo 'from snowboydetect import *' > __init__.py     # create __init__.py for a python module
    cd ../../..                                          # chang to the root directory of the repository
    ln -s snowboy/swig/Python snowboydetect
