@@ -9,8 +9,12 @@ import math
 
 
 SOUND_SPEED = 343.2
-MIC_DISTANCE = 0.064
-MAX_TDOA = MIC_DISTANCE / float(SOUND_SPEED)
+
+MIC_DISTANCE_6P1 = 0.064
+MAX_TDOA_6P1 = MIC_DISTANCE_6P1 / float(SOUND_SPEED)
+
+MIC_DISTANCE_4 = 0.08127
+MAX_TDOA_4 = MIC_DISTANCE_4 / float(SOUND_SPEED)
 
 
 
@@ -82,30 +86,78 @@ class MicArray(object):
         self.stop()
 
     def get_direction(self, buf):
-        MIC_GROUP_N = 3
-        MIC_GROUP = [[1, 4], [2, 5], [3, 6]]
+        best_guess = None
+        if self.channels == 8:
+            MIC_GROUP_N = 3
+            MIC_GROUP = [[1, 4], [2, 5], [3, 6]]
 
-        tau = [0] * MIC_GROUP_N
-        theta = [0] * MIC_GROUP_N
+            tau = [0] * MIC_GROUP_N
+            theta = [0] * MIC_GROUP_N
 
-        # buf = np.fromstring(buf, dtype='int16')
-        for i, v in enumerate(MIC_GROUP):
-            tau[i], _ = gcc_phat(buf[v[0]::8], buf[v[1]::8], fs=self.sample_rate, max_tau=MAX_TDOA, interp=1)
-            theta[i] = math.asin(tau[i] / MAX_TDOA) * 180 / math.pi
+            # buf = np.fromstring(buf, dtype='int16')
+            for i, v in enumerate(MIC_GROUP):
+                tau[i], _ = gcc_phat(buf[v[0]::8], buf[v[1]::8], fs=self.sample_rate, max_tau=MAX_TDOA_6P1, interp=1)
+                theta[i] = math.asin(tau[i] / MAX_TDOA_6P1) * 180 / math.pi
 
-        min_index = np.argmin(np.abs(tau))
-        if (min_index != 0 and theta[min_index - 1] >= 0) or (min_index == 0 and theta[MIC_GROUP_N - 1] < 0):
-            best_guess = (theta[min_index] + 360) % 360
-        else:
-            best_guess = (180 - theta[min_index])
+            min_index = np.argmin(np.abs(tau))
+            if (min_index != 0 and theta[min_index - 1] >= 0) or (min_index == 0 and theta[MIC_GROUP_N - 1] < 0):
+                best_guess = (theta[min_index] + 360) % 360
+            else:
+                best_guess = (180 - theta[min_index])
 
-        best_guess = (best_guess + 120 + min_index * 60) % 360
+            best_guess = (best_guess + 120 + min_index * 60) % 360
+        elif self.channels == 4:
+            MIC_GROUP_N = 2
+            MIC_GROUP = [[0, 2], [1, 3]]
+
+            tau = [0] * MIC_GROUP_N
+            theta = [0] * MIC_GROUP_N
+            for i, v in enumerate(MIC_GROUP):
+                tau[i], _ = gcc_phat(buf[v[0]::4], buf[v[1]::4], fs=self.sample_rate, max_tau=MAX_TDOA_4, interp=1)
+                theta[i] = math.asin(tau[i] / MAX_TDOA_4) * 180 / math.pi
+
+            if np.abs(theta[0]) < np.abs(theta[1]):
+                if theta[1] > 0:
+                    best_guess = (theta[0] + 360) % 360
+                else:
+                    best_guess = (180 - theta[0])
+            else:
+                if theta[0] < 0:
+                    best_guess = (theta[1] + 360) % 360
+                else:
+                    best_guess = (180 - theta[1])
+
+                best_guess = (best_guess + 90) % 360
+
+             
+        elif self.channels == 2:
+            pass
 
         return best_guess
 
 
+def test_4mic():
+    import signal
+    import time
 
-def main():
+    is_quit = threading.Event()
+
+    def signal_handler(sig, num):
+        is_quit.set()
+        print('Quit')
+
+    signal.signal(signal.SIGINT, signal_handler)
+ 
+    with MicArray(16000, 4, 16000 / 4)  as mic:
+        for chunk in mic.read_chunks():
+            direction = mic.get_direction(chunk)
+            print(int(direction))
+
+            if is_quit.is_set():
+                break
+
+
+def test_8mic():
     import signal
     import time
     from pixel_ring import pixel_ring
@@ -118,7 +170,7 @@ def main():
 
     signal.signal(signal.SIGINT, signal_handler)
  
-    with MicArray(16000, 8, 16000 / 4)  as mic:
+    with MicArray(16000, 4, 16000 / 4)  as mic:
         for chunk in mic.read_chunks():
             direction = mic.get_direction(chunk)
             pixel_ring.set_direction(direction)
@@ -131,4 +183,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # test_4mic()
+    test_8mic()
