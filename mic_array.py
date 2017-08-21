@@ -170,7 +170,7 @@ def test_8mic():
 
     signal.signal(signal.SIGINT, signal_handler)
  
-    with MicArray(16000, 4, 16000 / 4)  as mic:
+    with MicArray(16000, 8, 16000 / 4)  as mic:
         for chunk in mic.read_chunks():
             direction = mic.get_direction(chunk)
             pixel_ring.set_direction(direction)
