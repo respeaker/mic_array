@@ -127,7 +127,10 @@ class MicArray(object):
                 else:
                     best_guess = (180 - theta[1])
 
-                best_guess = (best_guess + 90) % 360
+                best_guess = (best_guess + 90 + 180) % 360
+
+
+            best_guess = (-best_guess + 120) % 360
 
              
         elif self.channels == 2:
