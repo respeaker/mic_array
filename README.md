@@ -9,8 +9,13 @@ Utils for [ReSpeaker Microphone Array](https://www.seeedstudio.com/ReSpeaker-Mic
 + `kws_doa.py` - search keyword and then estimate DOA
 
 ## Requirements
-+ Change the Mic Array's firmware to get 8 channels raw audio. See https://github.com/respeaker/mic_array_dfu
++ For ReSpeaker USB Mic Array - Far-field w/ 7 PDM Microphones
 
+  Change the Mic Array's firmware to get 8 channels raw audio. See https://github.com/respeaker/mic_array_dfu
+
++ For 4 Mic Array Pi hat
+
+   Install [seeed-voicecard](https://github.com/respeaker/seeed-voicecard) driver first. Change `CHANNELS = 8` to `CHANNELS = 4` in [vad_doa.py](https://github.com/respeaker/mic_array/blob/master/vad_doa.py#L10) and [kws_doa.py](https://github.com/respeaker/mic_array/blob/master/kws_doa.py#L11)
 
 ## Get started
 1. Run `pixel_ring.py` to control the pixel ring of the Mic Array through USB HID
