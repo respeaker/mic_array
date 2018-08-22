@@ -70,7 +70,7 @@ Google released [Google Assistant Library](https://github.com/googlesamples/assi
 
 ```
 sudo apt-get install libfftw3-dev libconfig-dev libasound2-dev
-git clone https://github.com/introlab/odas.git --branch=dev
+git clone https://github.com/introlab/odas.git --branch=phoenix
 mkdir odas/build
 cd odas/build
 cmake ..
