@@ -7,7 +7,7 @@ from pixel_ring import pixel_ring
 
 
 RATE = 16000
-CHANNELS = 8
+CHANNELS = 4
 VAD_FRAMES = 10     # ms
 DOA_FRAMES = 200    # ms
 
