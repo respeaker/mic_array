@@ -8,7 +8,7 @@ from snowboydetect import SnowboyDetect
 
 
 RATE = 16000
-CHANNELS = 8
+CHANNELS = 4
 KWS_FRAMES = 10     # ms
 DOA_FRAMES = 800    # ms
 
